@@ -10,6 +10,7 @@ type User {
   email: String!
   password: String!
   age: Float!
+  role: String!
 }
 
 type AuthenticationOutput {
@@ -32,6 +33,8 @@ input RegistrationInput {
   username: String!
   email: String!
   password: String!
+  age: Float!
+  role: String!
 }
 
 input LoginInput {
