@@ -1,14 +1,21 @@
-import {HttpException, Inject, InternalServerErrorException, Logger, UseFilters} from "@nestjs/common";
-import {ClientProxy} from "@nestjs/microservices";
-import {Args, Mutation, Resolver, Query} from "@nestjs/graphql";
-import {RegistrationInput} from "./inputs/registration.input";
-import {AuthenticationOutput} from "./outputs/authentication.output";
-import {LoginInput} from "./inputs/login.input";
-import { firstValueFrom } from "rxjs";
-import { RpcExceptionFilter } from "@studENV/shared/dist/filters/rcp-exception.filter";
+import {
+    BadRequestException,
+    HttpException,
+    Inject,
+    InternalServerErrorException,
+    Logger,
+    UseFilters
+} from "@nestjs/common";
+import {Args, Mutation, Resolver} from "@nestjs/graphql";
+import {catchError, firstValueFrom, throwError} from "rxjs";
+import {GraphqlExceptionFilter} from "@studENV/shared/dist/filters/graphql-exception.filter";
+import { AuthenticationOutput } from "@studENV/shared/dist/outputs/authoirization/authentication.output"
+import { RegistrationInput } from "@studENV/shared/dist/inputs/authorization/registration.input"
+import { LoginInput } from "@studENV/shared/dist/inputs/authorization/login.input"
+import {ClientProxy, RpcException} from "@nestjs/microservices";
 
 @Resolver()
-@UseFilters(RpcExceptionFilter)
+@UseFilters(new GraphqlExceptionFilter())
 export class AuthorizationResolver {
 
     private readonly logger = new Logger(AuthorizationResolver.name);
@@ -22,15 +29,17 @@ export class AuthorizationResolver {
     async registration(
         @Args('registrationInput') registrationInput: RegistrationInput
     ): Promise<AuthenticationOutput>
-    {   
+    {
         try {
             const result = await firstValueFrom(
                 this.natsClient.send({ cmd: "registration" }, registrationInput)
             );
-            console.log("registration result: ", result);
             return result;
         } catch (error) {
             if (error instanceof HttpException) {
+                throw error;
+            }
+            if (error instanceof RpcException) {
                 throw error;
             }
             throw new InternalServerErrorException(error.message);

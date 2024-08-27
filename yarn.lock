@@ -1153,9 +1153,15 @@
     "@nestjs/common" "^10.4.1"
     "@nestjs/graphql" "^12.2.0"
     "@nestjs/microservices" "^10.4.1"
+    class-transformer "^0.5.1"
+    class-validator "^0.14.1"
     dotenv "^16.4.5"
+    express "^4.19.2"
+    graphql "^16.9.0"
     process "^0.11.10"
+    rxjs "^7.8.1"
     typeorm "^0.3.20"
+    zod "^3.23.8"
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.11"
@@ -2759,7 +2765,7 @@ expect@^29.0.0, expect@^29.7.0:
     jest-message-util "^29.7.0"
     jest-util "^29.7.0"
 
-express@4.19.2, express@^4.17.1:
+express@4.19.2, express@^4.17.1, express@^4.19.2:
   version "4.19.2"
   resolved "https://registry.yarnpkg.com/express/-/express-4.19.2.tgz#e25437827a3aa7f2a827bc8171bbbb664a356465"
   integrity sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==
@@ -5722,3 +5728,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zod@^3.23.8:
+  version "3.23.8"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.8.tgz#e37b957b5d52079769fb8097099b592f0ef4067d"
+  integrity sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==
