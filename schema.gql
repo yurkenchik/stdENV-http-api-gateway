@@ -10,7 +10,9 @@ type User {
   email: String!
   password: String!
   age: Float!
-  role: String!
+  isBanned: Boolean!
+  banReason: String!
+  status: String!
 }
 
 type AuthenticationOutput {
@@ -34,7 +36,6 @@ input RegistrationInput {
   email: String!
   password: String!
   age: Float!
-  role: String!
 }
 
 input LoginInput {

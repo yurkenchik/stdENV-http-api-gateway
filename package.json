@@ -19,7 +19,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:run": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:run -d dist/typeorm/typeorm.config.js && echo 'Migration run completed'",
-    "migration:generate": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:generate src/database/migrations/InitialMigration -d dist/typeorm/typeorm.config.js && echo 'Migration generate completed'"
+    "migration:generate": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:generate src/database/migrations/InitialMigration -d dist/typeorm/typeorm.config.js && echo 'Migration generate completed'",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/database/typeorm/typeorm.config.ts",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/database/typeorm/typeorm.config.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
@@ -40,7 +42,8 @@
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-seeding": "^1.6.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -61,7 +64,7 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },
