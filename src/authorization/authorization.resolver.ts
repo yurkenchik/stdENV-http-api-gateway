@@ -1,17 +1,11 @@
-import {
-    BadRequestException,
-    HttpException,
-    Inject,
-    Logger,
-    UseFilters
-} from "@nestjs/common";
-import {Args, Mutation, Resolver} from "@nestjs/graphql";
+import {HttpException, Inject, InternalServerErrorException, Logger} from "@nestjs/common";
+import {Args, Mutation, Query, Resolver} from "@nestjs/graphql";
 import {firstValueFrom} from "rxjs";
-import { AuthenticationOutput } from "@studENV/shared/dist/outputs/authoirization/authentication.output";
-import { RegistrationInput } from "@studENV/shared/dist/inputs/authorization/registration.input";
-import { LoginInput } from "@studENV/shared/dist/inputs/authorization/login.input";
+import {AuthenticationOutput} from "@studENV/shared/dist/outputs/authoirization/authentication.output";
+import {RegistrationInput} from "@studENV/shared/dist/inputs/authorization/registration.input";
+import {LoginInput} from "@studENV/shared/dist/inputs/authorization/login.input";
 import {ClientProxy} from "@nestjs/microservices";
-import { GraphQLError } from "graphql";
+import {User} from "@studENV/shared/dist/entities/user.entity";
 
 @Resolver()
 export class AuthorizationResolver {
@@ -22,7 +16,7 @@ export class AuthorizationResolver {
         @Inject("NATS_SERVICE")
         private readonly natsClient: ClientProxy,
     ) {}
-    
+
     @Mutation(() => AuthenticationOutput)
     async registration(
         @Args('registrationInput') registrationInput: RegistrationInput
@@ -36,7 +30,6 @@ export class AuthorizationResolver {
         } catch (error) {
             this.logger.log(`Error during registration: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
-            // throwHttpException(error);
         }
     }
     
@@ -52,7 +45,7 @@ export class AuthorizationResolver {
             console.log("login result: ", result);
             return result;
         } catch (error) {
-            this.logger.log(`Error during registration: ${error.message}, status code: ${error.statusCode}`);
+            this.logger.log(`Error during login: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
         }
     }

@@ -5,14 +5,17 @@ import {Repository} from "typeorm";
 import * as process from "node:process";
 import {RoleEnum} from "@studENV/shared/dist/utils/role.enum";
 import {JwtService} from "@nestjs/jwt";
+import {Reflector} from "@nestjs/core";
+import {ROLE_KEY} from "../decorators/role.decorator";
 
 @Injectable()
-export class AdminGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
 
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly reflector: Reflector
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean>
@@ -21,6 +24,10 @@ export class AdminGuard implements CanActivate {
         const tokenParams = request.headers.authorization;
 
         try {
+            const role = this.reflector.get<RoleEnum>(ROLE_KEY, context.getHandler());
+            if (!role) {
+                return true;
+            }
 
             const [bearer, token] = tokenParams.split(" ");
 
@@ -37,7 +44,7 @@ export class AdminGuard implements CanActivate {
                 .where("id =: userId", { userId: userFromToken.id })
                 .getOne();
 
-            if (user.role !== RoleEnum.ADMIN) {
+            if (user.role !== role) {
                 throw new ForbiddenException("This action is only allowed for administrator");
             }
 
