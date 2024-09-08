@@ -3,7 +3,6 @@ import {Module} from '@nestjs/common';
 import {AuthorizationModule} from "./authorization/authorization.module";
 import {GraphQLModule} from "@nestjs/graphql";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {dataSourceOptions} from "@studENV/shared/dist/typeorm/typeorm.config";
 import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
 import {AppResolver} from "./app.resolver";
 import {DataSourceOptions} from "typeorm";
@@ -11,6 +10,8 @@ import { ClientsModule } from '@nestjs/microservices';
 import { ErrorController } from './error-handling/error.controller';
 import {APP_FILTER} from "@nestjs/core";
 import { GraphqlExceptionFilter } from './filters/graphql-exception.filter';
+import {UserModule} from "./user/user.module";
+import {dataSourceOptions} from "./database/typeorm/typeorm.config";
 
 @Module({
   controllers: [ErrorController],
@@ -23,6 +24,7 @@ import { GraphqlExceptionFilter } from './filters/graphql-exception.filter';
   ],
   imports: [
     AuthorizationModule,
+      UserModule,
     ClientsModule.register([
       {
         name: "NATS_SERVICE",
