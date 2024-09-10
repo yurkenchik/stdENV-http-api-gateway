@@ -20,8 +20,14 @@ type AuthenticationOutput {
   token: String!
 }
 
+type SeedingOutput {
+  message: String!
+}
+
 type Query {
   checkServer: String!
+  seedUsers: SeedingOutput!
+  seedRoles: SeedingOutput!
 }
 
 type Mutation {

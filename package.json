@@ -18,10 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:run": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:run -d dist/typeorm/typeorm.config.js && echo 'Migration run completed'",
-    "migration:generate": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:generate src/database/migrations/InitialMigration -d dist/typeorm/typeorm.config.js && echo 'Migration generate completed'",
-    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/database/typeorm/typeorm.config.ts",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/database/typeorm/typeorm.config.ts"
+    "migration:run": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:run -d ./dist/database/typeorm/typeorm.config.js && echo 'Migration run completed'",
+    "migration:generate": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:generate ./dist/database/migrations/$(date +%Y%m%d%H%M%S)_Migration -d dist/typeorm/typeorm.config.js && echo 'Migration generate completed'",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n ./dist/database/typeorm/typeorm.config.js",
+    "seed:run": "yarn build && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n ./dist/database/typeorm/typeorm.config.js"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
@@ -43,6 +43,7 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.1",
     "typeorm-seeding": "^1.6.1"
   },
   "devDependencies": {

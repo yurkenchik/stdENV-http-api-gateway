@@ -12,6 +12,7 @@ import {APP_FILTER} from "@nestjs/core";
 import { GraphqlExceptionFilter } from './filters/graphql-exception.filter';
 import {UserModule} from "./user/user.module";
 import {dataSourceOptions} from "./database/typeorm/typeorm.config";
+import {SeedingResolver} from "./database/seedings/seeding.resolver";
 
 @Module({
   controllers: [ErrorController],
@@ -20,7 +21,8 @@ import {dataSourceOptions} from "./database/typeorm/typeorm.config";
       {
           provide: APP_FILTER,
           useClass: GraphqlExceptionFilter
-      }
+      },
+      SeedingResolver
   ],
   imports: [
     AuthorizationModule,
@@ -34,7 +36,9 @@ import {dataSourceOptions} from "./database/typeorm/typeorm.config";
         }
       }
     ]),
-    TypeOrmModule.forRoot(dataSourceOptions as DataSourceOptions),
+    TypeOrmModule.forRootAsync({
+      useFactory: () => dataSourceOptions as DataSourceOptions
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: "schema.gql",
