@@ -15,10 +15,10 @@ export const dataSourceOptions: DataSourceOptions & SeederOptions = {
     password: String(process.env.DB_PASSWORD),
     database: process.env.DB_NAME,
     entities: [User, Role],
-    migrations: [__dirname + process.env.MIGRATIONS],
+    migrations: [__dirname + "@studENV/shared/dist/migrations/**/*.js"],
     seeds: [],
     factories: [],
-    synchronize: true,
+    synchronize: false,
 }
 
 console.log("DB DRIVER: ", process.env.DB_DRIVER);

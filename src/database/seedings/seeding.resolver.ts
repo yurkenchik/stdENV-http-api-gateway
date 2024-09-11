@@ -1,5 +1,5 @@
 import {Query, Resolver} from "@nestjs/graphql";
-import {ClientProxy, Payload} from "@nestjs/microservices";
+import {ClientProxy} from "@nestjs/microservices";
 import {HttpException, Inject, Logger} from "@nestjs/common";
 import {firstValueFrom} from "rxjs";
 import {SeedingOutput} from "@studENV/shared/dist/outputs/seeding/seeding.output";
