@@ -13,6 +13,7 @@ import { GraphqlExceptionFilter } from './filters/graphql-exception.filter';
 import {UserModule} from "./user/user.module";
 import {dataSourceOptions} from "./database/typeorm/typeorm.config";
 import {SeedingResolver} from "./database/seedings/seeding.resolver";
+import { MessagingModule } from './messaging/messaging.module';
 
 @Module({
   controllers: [ErrorController],
@@ -43,7 +44,8 @@ import {SeedingResolver} from "./database/seedings/seeding.resolver";
       driver: ApolloDriver,
       autoSchemaFile: "schema.gql",
       context: ({ req }) => ({ req }),
-    })
+    }),
+    MessagingModule
   ],
   exports: [
     GraphQLModule,

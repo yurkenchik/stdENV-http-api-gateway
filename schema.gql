@@ -24,6 +24,10 @@ type SeedingOutput {
   message: String!
 }
 
+type MessageOutput {
+  message: String!
+}
+
 type Query {
   checkServer: String!
   seedUsers: SeedingOutput!
@@ -33,6 +37,7 @@ type Query {
 type Mutation {
   registration(registrationInput: RegistrationInput!): AuthenticationOutput!
   login(loginInput: LoginInput!): AuthenticationOutput!
+  sendVerificationCode(sendVerificationCodeInput: SendVerificationCodeInput!): MessageOutput!
 }
 
 input RegistrationInput {
@@ -42,9 +47,15 @@ input RegistrationInput {
   email: String!
   password: String!
   age: Float!
+  role: String!
 }
 
 input LoginInput {
   email: String!
   password: String!
+}
+
+input SendVerificationCodeInput {
+  recipient: String!
+  verificationCode: String!
 }

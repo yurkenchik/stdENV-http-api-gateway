@@ -20,7 +20,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:run": "nest build && echo 'Build completed' && node ./node_modules/typeorm/cli.js migration:run -d ./dist/database/typeorm/typeorm.config.js && echo 'Migration run completed'",
     "migration:generate": "nest build && echo 'Build completed' && ts-node -e \"const readline = require('readline-sync'); const migrationName = readline.question('Enter migration name: '); require('child_process').execSync('ts-node ./node_modules/typeorm/cli.js migration:generate ./src/database/migrations/' + migrationName + ' -d ./src/database/typeorm/typeorm.config.ts'); console.log('Migration generate completed');\"",
-
     "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./src/database/typeorm/typeorm.config.ts",
     "migration:revert:all": "for i in {1..100}; do yarn migration:revert; done",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n ./dist/database/typeorm/typeorm.config.js",
