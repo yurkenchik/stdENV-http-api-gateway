@@ -13,6 +13,8 @@ type User {
   isBanned: Boolean!
   banReason: String!
   status: String!
+  isAccountVerified: Boolean!
+  verificationCode: String!
 }
 
 type AuthenticationOutput {
@@ -35,8 +37,9 @@ type Query {
 }
 
 type Mutation {
-  registration(registrationInput: RegistrationInput!): AuthenticationOutput!
+  registration(registrationInput: RegistrationInput!): User!
   login(loginInput: LoginInput!): AuthenticationOutput!
+  verifyUserAccountViaEmail(email: String!, verificationCode: String!): AuthenticationOutput!
   sendVerificationCode(sendVerificationCodeInput: SendVerificationCodeInput!): MessageOutput!
 }
 

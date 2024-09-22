@@ -17,10 +17,10 @@ export class AuthorizationResolver {
         private readonly natsClient: ClientProxy,
     ) {}
 
-    @Mutation(() => AuthenticationOutput)
+    @Mutation(() => User)
     async registration(
         @Args('registrationInput') registrationInput: RegistrationInput
-    ): Promise<AuthenticationOutput>
+    ): Promise<User>
     {
         try {
             const result = await firstValueFrom(
@@ -46,6 +46,26 @@ export class AuthorizationResolver {
             return result;
         } catch (error) {
             this.logger.log(`Error during login: ${error.message}, status code: ${error.statusCode}`);
+            throw new HttpException(error.message, error.statusCode);
+        }
+    }
+
+    @Mutation(() => AuthenticationOutput)
+    async verifyUserAccountViaEmail(
+        @Args("email") email: string,
+        @Args("verificationCode") verificationCode: string
+    ): Promise<AuthenticationOutput>
+    {
+        try {
+            const result = await firstValueFrom(
+                this.natsClient.send({ cmd: "verifyUserAccountViaEmail" }, {
+                    email: email,
+                    verificationCode: verificationCode,
+                })
+            )
+            return result;
+        } catch (error) {
+            this.logger.log(`Error during verifying user account: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
         }
     }
