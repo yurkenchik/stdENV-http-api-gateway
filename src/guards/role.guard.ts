@@ -9,6 +9,7 @@ import {JwtService} from "@nestjs/jwt";
 import {Reflector} from "@nestjs/core";
 import {ROLES_KEY} from "../decorators/role.decorator";
 import { GqlExecutionContext } from "@nestjs/graphql";
+import {ExceptionMessageEnum} from "../utils/exception-message.enum";
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -22,8 +23,7 @@ export class RoleGuard implements CanActivate {
         private readonly reflector: Reflector
     ) {}
 
-    async canActivate(context: ExecutionContext): Promise<boolean>
-    {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const graphQlContext = GqlExecutionContext.create(context);
         const { req } = graphQlContext.getContext();
         const tokenParams = req.headers.authorization;
@@ -36,26 +36,36 @@ export class RoleGuard implements CanActivate {
 
             const [bearer, token] = tokenParams.split(" ");
 
+            console.log("bearer and token ", [bearer, token]);
+
             if (bearer !== "Bearer" || !token) {
-                throw new UnauthorizedException("User is not authorized");
+                throw new UnauthorizedException(ExceptionMessageEnum.UNAUTHORIZED_USER);
             }
 
             const userFromToken = this.jwtService.verify(token, {
                 secret: process.env.JWT_SECRET_KEY || "secret"
             })
 
+            console.log("USER FROM TOKEN, ROLE GUARD: ", userFromToken);
+
             const user = await this.userRepository
-                .createQueryBuilder()
-                .where("id = :userId", { userId: userFromToken.id })
+                .createQueryBuilder("user")
+                .leftJoinAndSelect("user.role", "role")
+                .where("user.id = :userId", { userId: userFromToken.id })
                 .getOne();
+
+            console.log("USER: ", user);
 
             const userRole = await this.roleRepository
-                .createQueryBuilder()
-                .where("role = :role", { role: user.role })
+                .createQueryBuilder("role")
+                .where("role.id = :roleId", { roleId: user.role.id })
                 .getOne();
 
+            console.log("USER ROLE:", user.role);
+            console.log("USERROLE:",userRole);
+
             if (!roles.includes(userRole.role)) {
-                throw new ForbiddenException("This action is only allowed for administrator");
+                throw new ForbiddenException("This action is forbidden for this user");
             }
 
             req["user"] = user;

@@ -1,4 +1,4 @@
-import { HttpStatus, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { SendVerificationCodeInput } from '@studENV/shared/dist/inputs/email/send-verification-code.input';
 import { MessageOutput } from '@studENV/shared/dist/outputs/messages/message.output';
 import { HttpException, Inject } from '@nestjs/common';
@@ -19,13 +19,11 @@ export class MessagingResolver {
     @Mutation(() =>  MessageOutput)
     async sendVerificationCode(
         @Args("sendVerificationCodeInput") sendVerificationCodeInput: SendVerificationCodeInput
-    ): Promise<MessageOutput>
-    {
+    ): Promise<MessageOutput> {
         try {
-            const result = await firstValueFrom(
+            return await firstValueFrom(
                 this.natsClient.send({ cmd: "sendVerificationCodeEmail" }, sendVerificationCodeInput)
             );
-            return result;
         } catch (error) {
             this.logger.log(`Error during sending verification code: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.status, error.message);

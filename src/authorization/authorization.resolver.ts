@@ -23,10 +23,9 @@ export class AuthorizationResolver {
     ): Promise<User>
     {
         try {
-            const result = await firstValueFrom(
+            return await firstValueFrom(
                 this.natsClient.send({ cmd: "registration" }, registrationInput)
             );
-            return result;
         } catch (error) {
             this.logger.log(`Error during registration: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
@@ -36,14 +35,11 @@ export class AuthorizationResolver {
     @Mutation(() => AuthenticationOutput)
     async login(
         @Args("loginInput") loginInput: LoginInput
-    ): Promise<AuthenticationOutput>
-    {
+    ): Promise<AuthenticationOutput> {
         try {
-            const result = await firstValueFrom(
+            return await firstValueFrom(
                 this.natsClient.send({ cmd: "login" }, loginInput)
             );
-            console.log("login result: ", result);
-            return result;
         } catch (error) {
             this.logger.log(`Error during login: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
@@ -57,13 +53,12 @@ export class AuthorizationResolver {
     ): Promise<AuthenticationOutput>
     {
         try {
-            const result = await firstValueFrom(
+            return await firstValueFrom(
                 this.natsClient.send({ cmd: "verifyUserAccountViaEmail" }, {
                     email: email,
                     verificationCode: verificationCode,
                 })
             )
-            return result;
         } catch (error) {
             this.logger.log(`Error during verifying user account: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);

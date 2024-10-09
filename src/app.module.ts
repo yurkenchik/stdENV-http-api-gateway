@@ -14,6 +14,7 @@ import {UserModule} from "./user/user.module";
 import {dataSourceOptions} from "./database/typeorm/typeorm.config";
 import {SeedingResolver} from "./database/seedings/seeding.resolver";
 import { MessagingModule } from './messaging/messaging.module';
+import {CertificateModule} from "./certificate/certificate.module";
 
 @Module({
   controllers: [ErrorController],
@@ -43,9 +44,11 @@ import { MessagingModule } from './messaging/messaging.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: "schema.gql",
+      csrfPrevention: false,
       context: ({ req }) => ({ req }),
     }),
-    MessagingModule
+    MessagingModule,
+    CertificateModule,
   ],
   exports: [
     GraphQLModule,

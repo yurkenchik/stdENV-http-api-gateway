@@ -41,13 +41,17 @@ export class AuthGuard implements CanActivate {
 
             const userFromToken = this.jwtService.verify(token, {
                 secret: process.env.JWT_SECRET_KEY || "secret"
-            })
+            });
+
+            console.log("USER FROM TOKEN", userFromToken);
 
             const userFromDB = await this.userRepository
-                .createQueryBuilder()
-                .where("id = :userId", { userId: userFromToken.id })
-                .select(["id"])
+                .createQueryBuilder("user")
+                .where("user.id = :userId", { userId: userFromToken.id })
+                .select(["user.id", "user.email"])
                 .getOne();
+
+            console.log("USER FROM DB", userFromDB);
 
             if (!userFromDB) {
                 throw new UnauthorizedException(ExceptionMessageEnum.UNAUTHORIZED_USER)
