@@ -21,8 +21,5 @@ export const dataSourceOptions: DataSourceOptions & SeederOptions = {
     synchronize: false,
 }
 
-console.log("DB DRIVER: ", process.env.DB_DRIVER);
-console.log("DB TYPE: ", dataSourceOptions.type);
-
 const dataSource = new DataSource(dataSourceOptions);
 export default dataSource;
