@@ -27,7 +27,6 @@ export class AuthorizationResolver {
                 this.natsClient.send({ cmd: "registration" }, registrationInput)
             );
         } catch (error) {
-            this.logger.log(`Error during registration: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
         }
     }
@@ -41,7 +40,6 @@ export class AuthorizationResolver {
                 this.natsClient.send({ cmd: "login" }, loginInput)
             );
         } catch (error) {
-            this.logger.log(`Error during login: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
         }
     }
@@ -60,7 +58,6 @@ export class AuthorizationResolver {
                 })
             )
         } catch (error) {
-            this.logger.log(`Error during verifying user account: ${error.message}, status code: ${error.statusCode}`);
             throw new HttpException(error.message, error.statusCode);
         }
     }
